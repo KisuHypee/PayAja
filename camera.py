@@ -24,11 +24,10 @@ while True:
     if qr_reader.qr(frame):
         break
 
-    # Press 'q' to exit the loop
+    # Press 'q' to exit the loop, just in case button
     if cv2.waitKey(1) == ord('q'):
         break
 
 # Release the capture and writer objects
 cam.release()
-# out.release()
 cv2.destroyAllWindows()
