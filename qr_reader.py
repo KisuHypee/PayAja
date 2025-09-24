@@ -1,9 +1,18 @@
 from qreader import QReader
-from cv2 import imread
+from time import sleep
 
 
 qreader = QReader()
 
-def qr(image):
-    img = imread(image)
-    print(f"The QR code goes to :{qreader.detect_and_decode(image=img)}")
+def qr(img):
+    data = qreader.detect_and_decode(image=img)
+    if data:
+        sleep(1)
+        data = qreader.detect_and_decode(image=img)
+        print("QR detected: ")
+        for i in data:
+            print (i)
+        
+        return True
+    else:
+        return False

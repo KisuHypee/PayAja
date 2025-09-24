@@ -20,7 +20,8 @@ while True:
 
     # Display the captured frame
     cv2.imshow('Camera', frame)
-    qr_reader.qr(frame)
+    if qr_reader.qr(frame):
+        break
 
     # Press 'q' to exit the loop
     if cv2.waitKey(1) == ord('q'):
