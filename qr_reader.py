@@ -4,6 +4,6 @@ from cv2 import imread
 
 qreader = QReader()
 
-img = imread("qr-code.webp")
-
-print(f"The QR code goes to :{qreader.detect_and_decode(image=img)}")
+def qr(image):
+    img = imread(image)
+    print(f"The QR code goes to :{qreader.detect_and_decode(image=img)}")
