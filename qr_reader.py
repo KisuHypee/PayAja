@@ -1,9 +1,22 @@
 from qreader import QReader
-from cv2 import imread
+from webbrowser import open
 
 
-qreader = QReader()
+qreader = QReader() #Used for the QR detection fuction
 
-img = imread("qr-code.webp")
 
-print(f"The QR code goes to :{qreader.detect_and_decode(image=img)}")
+def qr(img):
+    data = qreader.detect_and_decode(image=img) #Scans the QR code
+    if data: #if QR code was detected
+        for i in data:
+            if i == None: #Occurs when scanned code is invalid
+                print("Please bring the QR closer to the camera")
+                break #Code continues running
+            print (i) #Outputs the decoded QR code
+            open(i)
+            return True
+
+
+
+ 
+    return False
