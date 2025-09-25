@@ -3,7 +3,7 @@ import json
 import os
 
 # define data file path
-data_file = os.path.join(os.path.dirname(__file__), '../accounts.json')
+data_file = os.path.join(os.path.dirname(__file__), 'accounts.json')
 
 # load data file
 def load_accounts():
