@@ -41,6 +41,7 @@ def login(username, password):
 def get_account(username):
     accounts = load_accounts()
     return accounts.get(username)
+
 #transaction function
 def transaction(username, receiver, amount):
     accounts = load_accounts()
@@ -57,6 +58,7 @@ def transaction(username, receiver, amount):
     accounts[receiver]['balance'] += amount
     save_accounts(accounts)
     return True, "Transaction successful."
+
 # topup function
 def topup(username, amount):
     accounts = load_accounts()

@@ -13,27 +13,34 @@ name = ""
 balance = 0.0
 receiver = ""
 amount = 0.0
+password = ""
 
 # functions |
 #           V            
 
 # signup window popup
 def signup_window():
+    # signup window setup
     signup_win = tk.Toplevel(root)
-    signup_win.title("Sign Up")
-    signup_win.geometry("300x250")
+    signup_win.title("PayAja - Sign Up")
+    signup_win.geometry("300x300")
+    signup_win.configure(bg="#f5f6fa")
+    frame = tk.Frame(signup_win, bg="#f5f6fa")
+    frame.pack(expand=True, fill="both")
+    # signup title
+    tk.Label(frame, text="Sign Up", font=("Arial", 20, "bold"), bg="#f5f6fa", fg="#273c75").pack(pady=(15, 20))
 
-    tk.Label(signup_win, text="Username").pack()
-    username_entry = tk.Entry(signup_win)
-    username_entry.pack()
+    tk.Label(frame, text="Username", font=("Arial", 12), bg="#f5f6fa").pack(anchor="w", padx=20)
+    username_entry = tk.Entry(frame, font=("Arial", 12), width=25)
+    username_entry.pack(padx=20, pady=(0, 10))
 
-    tk.Label(signup_win, text="Password").pack()
-    password_entry = tk.Entry(signup_win, show="*")
-    password_entry.pack()
+    tk.Label(frame, text="Password", font=("Arial", 12), bg="#f5f6fa").pack(anchor="w", padx=20)
+    password_entry = tk.Entry(frame, show="*", font=("Arial", 12), width=25)
+    password_entry.pack(padx=20, pady=(0, 10))
 
-    tk.Label(signup_win, text="Name").pack()
-    name_entry = tk.Entry(signup_win)
-    name_entry.pack()
+    tk.Label(frame, text="Name", font=("Arial", 12), bg="#f5f6fa").pack(anchor="w", padx=20)
+    name_entry = tk.Entry(frame, font=("Arial", 12), width=25)
+    name_entry.pack(padx=20, pady=(0, 20))
 
     # logic for signup (used for button)
     def submit_signup():
@@ -49,7 +56,7 @@ def signup_window():
         else:
             messagebox.showerror("Error", "Username already exists.")
     
-    tk.Button(signup_win, text="Sign Up", command=submit_signup).pack(pady=10)
+    tk.Button(frame, text="Sign Up", command=submit_signup, font=("Arial", 12), bg="#44bd32", fg="white", width=20).pack(pady=10)
 
 # logic for login (used for button)
 def auth_login():
@@ -71,51 +78,49 @@ def auth_login():
 
 # mainmenu
 def show_main_menu(user):
+    root.title("PayAja - Main Menu")
     # clears login widgets
     for widget in root.winfo_children():
         widget.destroy()
     # setting frame
     menu_frame = tk.Frame(root, bg="#f5f6fa")
-    menu_frame.pack(expand=True)
+    menu_frame.pack(expand=True, fill="both")
     # greeting
-    greeting = tk.Label(menu_frame, text=f"Hello, {user['name']}!", font=("Arial", 16))
-    greeting.pack(pady=10)
+    greeting = tk.Label(menu_frame, text=f"Hello, {user['name']}!", font=("Arial", 18, "bold"), bg="#f5f6fa", fg="#273c75")
+    greeting.pack(pady=(30, 10))
     # show balance
     global balance_label
-    balance_label = tk.Label(menu_frame, text=f"Balance: {user['balance']}", font=("Arial", 14))
-    balance_label.pack(pady=10)
+    balance_label = tk.Label(menu_frame, text=f"Balance: {user['balance']}", font=("Arial", 14), bg="#f5f6fa")
+    balance_label.pack(pady=(0, 20))
     # top up button
-    topup_button = tk.Button(menu_frame, text="Top Up 100", command=topup_window)
+    topup_button = tk.Button(menu_frame, text="Top Up", command=topup_window, font=("Arial", 12), bg="#44bd32", fg="white", width=20)
     topup_button.pack(pady=10)
     # transfer button
-    transfer_button = tk.Button(menu_frame, text="Transfer", command=transfer_window)
+    transfer_button = tk.Button(menu_frame, text="Transfer", command=transfer_window, font=("Arial", 12), bg="#40739e", fg="white", width=20)
     transfer_button.pack(pady=10)
 
 def transfer_window():
-
     #setup transfer frame
     transfer_win = tk.Toplevel(root)
-    transfer_win.title("Transfer Funds")
-    transfer_win.geometry("300x250")
-
+    transfer_win.title("PayAja - Transfer Funds")
+    transfer_win.geometry("350x300")
+    transfer_win.configure(bg="#f5f6fa")
+    frame = tk.Frame(transfer_win, bg="#f5f6fa")
+    frame.pack(expand=True, fill="both")
     #trasnfer title
-    transfer_title = tk.Label(transfer_win, text="Transfer Funds", font=("Arial", 16))
-    transfer_title.pack(pady=10)
-
+    transfer_title = tk.Label(frame, text="Transfer Funds", font=("Arial", 18, "bold"), bg="#f5f6fa", fg="#273c75")
+    transfer_title.pack(pady=(20, 20))
     #receiver entry
-    tk.Label(transfer_win, text="Receiver Username").pack()
-    receiver_entry = tk.Entry(transfer_win)
-    receiver_entry.pack()
-
+    tk.Label(frame, text="Receiver Username", font=("Arial", 12), bg="#f5f6fa").pack(anchor="w", padx=20)
+    receiver_entry = tk.Entry(frame, font=("Arial", 12), width=25)
+    receiver_entry.pack(padx=20, pady=(0, 10))
     #amount entry
-    tk.Label(transfer_win, text="Amount").pack()
-    amount_entry = tk.Entry(transfer_win)
-    amount_entry.pack()
-
+    tk.Label(frame, text="Amount", font=("Arial", 12), bg="#f5f6fa").pack(anchor="w", padx=20)
+    amount_entry = tk.Entry(frame, font=("Arial", 12), width=25)
+    amount_entry.pack(padx=20, pady=(0, 20))
     def scan_qr():
         user = QRscanner()
         receiver_entry.insert(0, user)
-
     #submit button
     def submit_transfer():
         global balance
@@ -143,12 +148,12 @@ def transfer_window():
             messagebox.showerror("Error", msg)
         transfer_win.destroy()
 
-    tk.Button(transfer_win, text="Use QR Scanner", command=scan_qr).pack(pady=10)
-
+    #QR scanner button
+    tk.Button(transfer_win, text="Use QR Scanner", command=scan_qr, font=("Arial", 12), bg="#44bd32", fg="white", width=20).pack(pady=10)
     #submit button
-    tk.Button(transfer_win, text="Submit", command=submit_transfer).pack(pady=10)
+    tk.Button(frame, text="Submit", command=submit_transfer, font=("Arial", 12), bg="#40739e", fg="white", width=20).pack(pady=10)
 
-# top up 100
+# top up
 def topup_window():
     # setup topup frame
         topup_win = tk.Toplevel(root)
@@ -240,13 +245,3 @@ signup_button.pack(pady=(0, 10))
 
 # start
 root.mainloop()
-
-
-def mainmenu():
-    print("Welcome to PayAja")
-    print("Your Balance:")
-    print("Balance")
-    print("1. Transfer")
-    print("2. History")
-    print("3. Top Up")
-
