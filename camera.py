@@ -14,7 +14,8 @@ def QRscanner():
 
         # Display the captured frame
         cv2.imshow('Camera', frame)
-        if qr_reader.qr(frame):
+        decryption = qr_reader.qr(frame)
+        if decryption:
             break
 
         # Press 'q' to exit the loop, just in case button
@@ -23,4 +24,5 @@ def QRscanner():
 
     # Release the capture and writer objects
     cam.release()
-
+    cv2.destroyWindow('Camera')
+    return decryption
