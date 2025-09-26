@@ -14,8 +14,5 @@ def qr(img):
                 print("Please bring the QR closer to the camera")
                 break #Code continues running
 
-            print (i) #Outputs the decoded QR code
-            open(i) #opens link in web browser, will replace this later
-
-            return True
+            return i
     return False

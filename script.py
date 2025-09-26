@@ -1,6 +1,7 @@
 # imports
 import tkinter as tk
 from tkinter import messagebox
+from camera import QRscanner
 
 # import functions from data_manager
 from data_manager import signup, login, get_account, load_accounts, save_accounts, transaction
@@ -91,21 +92,30 @@ def show_main_menu(user):
     transfer_button.pack(pady=10)
 
 def transfer_window():
+
     #setup transfer frame
     transfer_win = tk.Toplevel(root)
     transfer_win.title("Transfer Funds")
     transfer_win.geometry("300x250")
+
     #trasnfer title
     transfer_title = tk.Label(transfer_win, text="Transfer Funds", font=("Arial", 16))
     transfer_title.pack(pady=10)
+
     #receiver entry
     tk.Label(transfer_win, text="Receiver Username").pack()
     receiver_entry = tk.Entry(transfer_win)
     receiver_entry.pack()
+
     #amount entry
     tk.Label(transfer_win, text="Amount").pack()
     amount_entry = tk.Entry(transfer_win)
     amount_entry.pack()
+
+    def scan_qr():
+        user = QRscanner()
+        receiver_entry.insert(0, user)
+
     #submit button
     def submit_transfer():
         global balance
@@ -132,6 +142,9 @@ def transfer_window():
         else:
             messagebox.showerror("Error", msg)
         transfer_win.destroy()
+
+    tk.Button(transfer_win, text="Use QR Scanner", command=scan_qr).pack(pady=10)
+
     #submit button
     tk.Button(transfer_win, text="Submit", command=submit_transfer).pack(pady=10)
 
