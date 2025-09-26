@@ -57,3 +57,16 @@ def transaction(username, receiver, amount):
     accounts[receiver]['balance'] += amount
     save_accounts(accounts)
     return True, "Transaction successful."
+# topup function
+def topup(username, amount):
+    accounts = load_accounts()
+    # sanity check for fatal errors
+    if username not in accounts:
+        return False, "User does not exist."
+    # amount must be positive
+    if amount <= 0:
+        return False, "Amount must be positive."
+    # logic
+    accounts[username]['balance'] += amount
+    save_accounts(accounts)
+    return True, f"Successfully topped up {amount}!"

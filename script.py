@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 # import functions from data_manager
-from data_manager import signup, login, get_account, load_accounts, save_accounts, transaction
+from data_manager import signup, login, get_account, load_accounts, save_accounts, transaction, topup
 
 
 #variables
@@ -84,7 +84,7 @@ def show_main_menu(user):
     balance_label = tk.Label(menu_frame, text=f"Balance: {user['balance']}", font=("Arial", 14))
     balance_label.pack(pady=10)
     # top up button
-    topup_button = tk.Button(menu_frame, text="Top Up 100", command=topup)
+    topup_button = tk.Button(menu_frame, text="Top Up 100", command=topup_window)
     topup_button.pack(pady=10)
     # transfer button
     transfer_button = tk.Button(menu_frame, text="Transfer", command=transfer_window)
@@ -136,18 +136,52 @@ def transfer_window():
     tk.Button(transfer_win, text="Submit", command=submit_transfer).pack(pady=10)
 
 # top up 100
-def topup():
-    global balance
-    user = get_account(username)
-    balance = user['balance'] + 100
-    accounts = load_accounts()
-    accounts[username] = {
-        **accounts[username],
-        'balance': balance
-    }
-    # refresh balance
-    save_accounts(accounts)
-    balance_label.config(text=f"Balance: {balance}")
+def topup_window():
+    # setup topup frame
+        topup_win = tk.Toplevel(root)
+        topup_win.title("PayAja - Top Up Funds")
+        topup_win.geometry("350x300")
+        topup_win.configure(bg="#f5f6fa")
+        frame = tk.Frame(topup_win, bg="#f5f6fa")
+        frame.pack(expand=True, fill="both")
+        # topup title
+        topup_title = tk.Label(frame, text="Top Up Funds", font=("Arial", 18, "bold"), bg="#f5f6fa", fg="#273c75")
+        topup_title.pack(pady=(20, 20))
+        # amount entry
+        tk.Label(frame, text="Top Up Amount", font=("Arial", 12), bg="#f5f6fa").pack(anchor="w", padx=20)
+        amount_entry = tk.Entry(frame, font=("Arial", 12), width=25)
+        amount_entry.pack(padx=20, pady=(0, 10))
+        # password entry
+        tk.Label(frame, text="Password", font=("Arial", 12), bg="#f5f6fa").pack(anchor="w", padx=20)
+        password_entry = tk.Entry(frame, show="*", font=("Arial", 12), width=25)
+        password_entry.pack(padx=20, pady=(0, 20))
+
+        def submit_topup():
+            global balance
+            try:
+                amount = float(amount_entry.get())
+            except ValueError:
+                messagebox.showerror("Error", "Invalid amount.")
+                return
+            if amount <= 0:
+                messagebox.showerror("Error", "Amount must be positive.")
+                return
+            pwd = password_entry.get()
+            user = get_account(username)
+            if user['password'] != pwd:
+                messagebox.showerror("Error", "Incorrect password.")
+                return
+            success, msg = topup(username, amount)
+            if success:
+                balance = get_account(username)['balance']
+                balance_label.config(text=f"Balance: {balance}")
+                messagebox.showinfo("Success", msg)
+                topup_win.destroy()
+                show_main_menu(get_account(username))
+            else:
+                messagebox.showerror("Error", msg)
+        #submit button
+        tk.Button(frame, text="Submit", command=submit_topup, font=("Arial", 12), bg="#44bd32", fg="white", width=20).pack(pady=10)
 
 # root (always take you to login)
 root = tk.Tk()
