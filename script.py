@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 # import functions from data_manager
-from data_manager import signup, login, get_account, load_accounts, save_accounts
+from data_manager import signup, login, get_account, load_accounts, save_accounts, transaction
 
 
 #variables
@@ -86,6 +86,54 @@ def show_main_menu(user):
     # top up button
     topup_button = tk.Button(menu_frame, text="Top Up 100", command=topup)
     topup_button.pack(pady=10)
+    # transfer button
+    transfer_button = tk.Button(menu_frame, text="Transfer", command=transfer_window)
+    transfer_button.pack(pady=10)
+
+def transfer_window():
+    #setup transfer frame
+    transfer_win = tk.Toplevel(root)
+    transfer_win.title("Transfer Funds")
+    transfer_win.geometry("300x250")
+    #trasnfer title
+    transfer_title = tk.Label(transfer_win, text="Transfer Funds", font=("Arial", 16))
+    transfer_title.pack(pady=10)
+    #receiver entry
+    tk.Label(transfer_win, text="Receiver Username").pack()
+    receiver_entry = tk.Entry(transfer_win)
+    receiver_entry.pack()
+    #amount entry
+    tk.Label(transfer_win, text="Amount").pack()
+    amount_entry = tk.Entry(transfer_win)
+    amount_entry.pack()
+    #submit button
+    def submit_transfer():
+        global balance
+        receiver = receiver_entry.get()
+        #validate amount data type
+        try:
+            amount = float(amount_entry.get())
+        except ValueError:
+            messagebox.showerror("Error", "Invalid amount.")
+            return
+        #validate ammount positive
+        if amount <= 0:
+            messagebox.showerror("Error", "Amount must be positive.")
+            return
+        #show success message
+        success, msg = transaction(username, receiver, amount)
+        if success:
+            messagebox.showinfo("Success", msg)
+            #refresh balance
+            user = get_account(username)
+            global balance_label
+            balance_label.config(text=f"Balance: {user['balance']}")
+            show_main_menu(user)
+        else:
+            messagebox.showerror("Error", msg)
+        transfer_win.destroy()
+    #submit button
+    tk.Button(transfer_win, text="Submit", command=submit_transfer).pack(pady=10)
 
 # top up 100
 def topup():

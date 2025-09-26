@@ -41,3 +41,19 @@ def login(username, password):
 def get_account(username):
     accounts = load_accounts()
     return accounts.get(username)
+#transaction function
+def transaction(username, receiver, amount):
+    accounts = load_accounts()
+    #cannot to self
+    if username == receiver:
+        return False, "You cannot transfer to yourself."
+    #receiver not found
+    if username not in accounts or receiver not in accounts:
+        return False, "Receiver does not have an account."
+    #insufficient balance
+    if accounts[username]['balance'] < amount:
+        return False, "Insufficient balance."
+    accounts[username]['balance'] -= amount
+    accounts[receiver]['balance'] += amount
+    save_accounts(accounts)
+    return True, "Transaction successful."
