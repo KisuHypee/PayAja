@@ -1,33 +1,26 @@
 import cv2
 import qr_reader
 
-# Open the default camera
-cam = cv2.VideoCapture(0)
-reading_qr = False
+def QRscanner():
+    cam = cv2.VideoCapture(0)
+    reading_qr = False
 
-# Get the default frame width and height
-frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
-frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    # Get the default frame width and height
+    frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-# Define the codec and create VideoWriter object
-# fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-# out = cv2.VideoWriter('output.mp4', fourcc, 20.0, (frame_width, frame_height))
+    while True:
+        ret, frame = cam.read()
 
-while True:
-    ret, frame = cam.read()
+        # Display the captured frame
+        cv2.imshow('Camera', frame)
+        if qr_reader.qr(frame):
+            break
 
-    # Write the frame to the output file
-    # out.write(frame)
+        # Press 'q' to exit the loop, just in case button
+        if cv2.waitKey(1) == ord('q'):
+            break
 
-    # Display the captured frame
-    cv2.imshow('Camera', frame)
-    if qr_reader.qr(frame):
-        break
+    # Release the capture and writer objects
+    cam.release()
 
-    # Press 'q' to exit the loop, just in case button
-    if cv2.waitKey(1) == ord('q'):
-        break
-
-# Release the capture and writer objects
-cam.release()
-cv2.destroyAllWindows()
